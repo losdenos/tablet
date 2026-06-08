@@ -1,86 +1,117 @@
-# ~/.config/i3/config — Tablet-optimized i3 config
-# Fujitsu Arrows Tab V727 — touchscreen-primary, no permanent keyboard
-# Merge this into your existing config or replace it
+# ~/.config/i3/config — Tablet-optimized, 1920x1280
+# Fujitsu Arrows Tab V727
 
-# ── Mod key: use Super (Windows key) ──────────────────────────────────────
 set $mod Mod4
 
-# ── Fonts: larger for touch readability ───────────────────────────────────
-font pango:Sans 13
+# ── Font ──────────────────────────────────────────────────────────
+font pango:Symbols Nerd Font 13, Sans 13
 
-# ── Border: thicker = easier to grab with fingers ─────────────────────────
-default_border pixel 3
-default_floating_border pixel 3
-hide_edge_borders none
+# ── Borders & gaps ────────────────────────────────────────────────
+default_border pixel 2
+default_floating_border pixel 2
+hide_edge_borders smart
+gaps inner 10
+gaps outer 6
+smart_gaps on
+smart_borders on
 
-# ── Touch-friendly gaps (requires i3-gaps) ────────────────────────────────
-# yay -S i3-gaps  (if not already using gaps variant)
-gaps inner 8
-gaps outer 4
-
-# ── Auto-start services ───────────────────────────────────────────────────
+# ── Autostart ─────────────────────────────────────────────────────
+exec --no-startup-id picom --config ~/.config/picom/picom.conf -b
 exec --no-startup-id ~/.config/tablet/rotation_daemon.sh
+exec --no-startup-id touchegg
 exec --no-startup-id dunst
-exec --no-startup-id nm-applet
-# Tap-to-click and palm rejection via libinput
+exec --no-startup-id nm-applet --indicator
+exec --no-startup-id feh --bg-fill ~/.config/wallpaper.png
+# Tap-to-click
 exec --no-startup-id xinput set-prop "$(xinput list --name-only | grep -i touch | head -1)" "libinput Tapping Enabled" 1
 
-# ── Status bar (i3status) ─────────────────────────────────────────────────
+# ── Keybinds ──────────────────────────────────────────────────────
+bindsym $mod+space       exec ~/.config/tablet/dashboard_hub.sh
+bindsym $mod+k           exec ~/.config/tablet/osk_toggle.sh
+bindsym $mod+q           exec ~/.config/tablet/quick_controls.sh
+bindsym $mod+p           exec ~/.config/tablet/power_menu.sh
+bindsym $mod+Return      exec alacritty
+bindsym $mod+Shift+q     kill
+bindsym $mod+f           fullscreen toggle
+bindsym $mod+Shift+space floating toggle
+bindsym $mod+r           mode "resize"
+
+# Focus
+bindsym $mod+Left   focus left
+bindsym $mod+Right  focus right
+bindsym $mod+Up     focus up
+bindsym $mod+Down   focus down
+
+# Move
+bindsym $mod+Shift+Left   move left
+bindsym $mod+Shift+Right  move right
+bindsym $mod+Shift+Up     move up
+bindsym $mod+Shift+Down   move down
+
+# Workspaces
+bindsym $mod+1 workspace 1
+bindsym $mod+2 workspace 2
+bindsym $mod+3 workspace 3
+bindsym $mod+4 workspace 4
+bindsym $mod+Shift+1 move container to workspace 1
+bindsym $mod+Shift+2 move container to workspace 2
+bindsym $mod+Shift+3 move container to workspace 3
+bindsym $mod+Shift+4 move container to workspace 4
+
+# Reload/restart
+bindsym $mod+Shift+r restart
+bindsym $mod+Shift+c reload
+
+# ── Resize mode ───────────────────────────────────────────────────
+mode "resize" {
+    bindsym Left  resize shrink width  60px
+    bindsym Right resize grow   width  60px
+    bindsym Up    resize shrink height 60px
+    bindsym Down  resize grow   height 60px
+    bindsym Return mode "default"
+    bindsym Escape mode "default"
+}
+
+# ── Float rules ───────────────────────────────────────────────────
+for_window [window_role="pop-up"]          floating enable
+for_window [window_role="task_dialog"]     floating enable
+for_window [class="Nm-connection-editor"]  floating enable
+for_window [class="Onboard"]               floating enable, border none, sticky enable
+for_window [title="Preferences"]           floating enable
+
+# ── Colors (Catppuccin Mocha) ─────────────────────────────────────
+set $crust   #11111b
+set $base    #1e1e2e
+set $surface #313244
+set $overlay #6c7086
+set $text    #cdd6f4
+set $cyan    #89dceb
+set $blue    #89b4fa
+set $magenta #cba6f7
+
+# class                  border    bg        text     indicator  child
+client.focused           $blue     $base     $text    $cyan      $blue
+client.focused_inactive  $surface  $base     $overlay $surface   $surface
+client.unfocused         $crust    $crust    $overlay $crust     $crust
+client.urgent            $magenta  $base     $text    $magenta   $magenta
+
+# ── Bar ───────────────────────────────────────────────────────────
 bar {
     position top
-    height 36
-    font pango:Sans 12
-    status_command i3status
+    height 40
+    font pango:Symbols Nerd Font 13, Sans 13
+    separator_symbol "  "
+    status_command i3status --config ~/.config/i3/i3status.conf
     tray_output primary
+    tray_padding 6
 
     colors {
-        background #1e1e2e
-        statusline #cdd6f4
-        separator  #6c7086
-
+        background         #1e1e2eee
+        statusline         #cdd6f4
+        separator          #6c7086
         focused_workspace  #89b4fa #89b4fa #1e1e2e
         active_workspace   #313244 #313244 #cdd6f4
         inactive_workspace #1e1e2e #1e1e2e #6c7086
         urgent_workspace   #f38ba8 #f38ba8 #1e1e2e
     }
-
-    # Tap the bar clock → open dashboard hub
-    binding_mode_indicator yes
 }
-
-# ── Dashboard hub: swipe up from bottom edge or $mod+space ────────────────
-bindsym $mod+space exec ~/.config/tablet/dashboard_hub.sh
-bindsym $mod+k     exec ~/.config/tablet/osk_toggle.sh
-bindsym $mod+q     exec ~/.config/tablet/quick_controls.sh
-bindsym $mod+p     exec ~/.config/tablet/power_menu.sh
-
-# ── Window management (keep essential keyboard shortcuts) ─────────────────
-bindsym $mod+Shift+q kill
-bindsym $mod+f       fullscreen toggle
-bindsym $mod+Shift+space floating toggle
-bindsym $mod+r       mode "resize"
-
-# Focus with touch: click window to focus (default i3 behavior is fine)
-
-# ── Resize mode ───────────────────────────────────────────────────────────
-mode "resize" {
-    bindsym h resize shrink width  40 px
-    bindsym l resize grow   width  40 px
-    bindsym k resize shrink height 40 px
-    bindsym j resize grow   height 40 px
-    bindsym Return mode "default"
-    bindsym Escape mode "default"
-}
-
-# ── Float certain windows automatically ───────────────────────────────────
-for_window [window_role="pop-up"]        floating enable
-for_window [window_role="task_dialog"]   floating enable
-for_window [class="Nm-connection-editor"] floating enable
-for_window [title="Preferences"]        floating enable
-
-# ── Color scheme (Catppuccin Mocha) ───────────────────────────────────────
-# class                  border   bg       text     indicator child_border
-client.focused           #89b4fa  #1e1e2e  #cdd6f4  #89b4fa   #89b4fa
-client.focused_inactive  #313244  #1e1e2e  #6c7086  #313244   #313244
-client.unfocused         #1e1e2e  #1e1e2e  #6c7086  #1e1e2e   #1e1e2e
-client.urgent            #f38ba8  #1e1e2e  #f38ba8  #f38ba8   #f38ba8

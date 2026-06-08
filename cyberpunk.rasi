@@ -1,0 +1,113 @@
+/* ~/.config/rofi/cyberpunk.rasi
+   Touch-friendly rofi theme — 1920x1280 tablet
+   Usage: rofi -show drun -theme ~/.config/rofi/cyberpunk.rasi
+*/
+
+* {
+    bg:         #03060f;
+    bg-alt:     #080f1e;
+    bg-hover:   #0d1a30;
+    border-col: #00ffff40;
+    accent:     #00ffff;
+    magenta:    #ff00ff;
+    text:       #cceeff;
+    text-dim:   #4d7a99;
+    urgent:     #ff4444;
+    font:       "Symbols Nerd Font 15, Sans 15";
+
+    background-color:   transparent;
+    text-color:         @text;
+}
+
+window {
+    background-color:   @bg;
+    border:             1px solid;
+    border-color:       @border-col;
+    border-radius:      16px;
+    width:              860px;
+    padding:            0px;
+    x-offset:           0;
+    y-offset:           0;
+    location:           center;
+}
+
+mainbox {
+    background-color:   transparent;
+    children:           [ inputbar, listview ];
+    spacing:            0px;
+    padding:            16px;
+}
+
+inputbar {
+    background-color:   @bg-alt;
+    border-radius:      10px;
+    padding:            14px 18px;
+    margin:             0px 0px 14px 0px;
+    children:           [ prompt, textbox-prompt-colon, entry ];
+    spacing:            8px;
+}
+
+prompt {
+    background-color:   transparent;
+    text-color:         @accent;
+    font:               "Symbols Nerd Font Bold 15, Sans Bold 15";
+}
+
+textbox-prompt-colon {
+    background-color:   transparent;
+    text-color:         @text-dim;
+    str:                "›";
+    margin:             0px 4px 0px 0px;
+}
+
+entry {
+    background-color:   transparent;
+    text-color:         @text;
+    placeholder:        "Search...";
+    placeholder-color:  @text-dim;
+    cursor:             text;
+}
+
+listview {
+    background-color:   transparent;
+    columns:            3;
+    lines:              3;
+    spacing:            10px;
+    scrollbar:          false;
+    layout:             vertical;
+    fixed-height:       true;
+}
+
+element {
+    background-color:   @bg-alt;
+    border-radius:      12px;
+    border:             1px solid @border-col;
+    padding:            20px 14px;
+    orientation:        vertical;
+    cursor:             pointer;
+    spacing:            10px;
+}
+
+element normal.normal {
+    background-color:   @bg-alt;
+    text-color:         @text;
+}
+
+element selected.normal {
+    background-color:   @bg-hover;
+    border-color:       @accent;
+    text-color:         @accent;
+}
+
+element-icon {
+    size:               48px;
+    horizontal-align:   0.5;
+    vertical-align:     0.5;
+}
+
+element-text {
+    horizontal-align:   0.5;
+    vertical-align:     0.5;
+    text-color:         inherit;
+    font:               "Symbols Nerd Font 13, Sans 13";
+}

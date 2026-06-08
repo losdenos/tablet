@@ -1,0 +1,231 @@
+// ─────────────────────────────────────────────────────────────────
+//  CYBERPUNK DESKTOP — eww.scss
+// ─────────────────────────────────────────────────────────────────
+
+// Palette
+$bg:        #03060f;
+$bg2:       #080f1e;
+$panel:     #060d1a;
+$border:    #0ff;
+$border2:   #0ff4;
+$cyan:      #00ffff;
+$magenta:   #ff00ff;
+$yellow:    #ffe600;
+$green:     #00ff9f;
+$dim:       #0ff6;
+$text:      #cceeff;
+$textdim:   #4488aa;
+$font-mono: "JetBrains Mono", "Fira Code", "Cascadia Code", monospace;
+
+@import url("https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;700&display=swap");
+
+* {
+  font-family: $font-mono;
+  font-size: 13px;
+  color: $text;
+}
+
+// ── Root ──────────────────────────────────────────────────────────
+.desktop-root {
+  background-color: $bg;
+  padding: 0;
+}
+
+// ── Top bar ───────────────────────────────────────────────────────
+.top-bar {
+  background-color: $bg2;
+  border-bottom: 1px solid $border2;
+  padding: 6px 20px;
+  min-height: 36px;
+}
+
+.sys-tag {
+  color: $green;
+  font-weight: 700;
+  font-size: 11px;
+  letter-spacing: 2px;
+}
+
+.wifi-label {
+  color: $cyan;
+  font-size: 12px;
+}
+
+.batt-label {
+  color: $yellow;
+  font-size: 12px;
+}
+
+.date-label {
+  color: $dim;
+  font-size: 12px;
+  letter-spacing: 1px;
+}
+
+.time-label {
+  color: $cyan;
+  font-weight: 700;
+  font-size: 14px;
+  letter-spacing: 2px;
+}
+
+.divider {
+  color: $border2;
+}
+
+// ── Left panel ────────────────────────────────────────────────────
+.left-panel {
+  background-color: $panel;
+  border-right: 1px solid $border2;
+  padding: 24px 0 24px 16px;
+  min-width: 180px;
+}
+
+.panel-heading {
+  color: $cyan;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 3px;
+  margin-bottom: 4px;
+  margin-top: 8px;
+}
+
+.panel-sep {
+  min-height: 12px;
+}
+
+.app-btn {
+  background-color: transparent;
+  border: none;
+  border-left: 2px solid transparent;
+  padding: 9px 12px 9px 8px;
+  margin-right: 0px;
+  border-radius: 0;
+
+  &:hover {
+    background-color: #0ff1;
+    border-left: 2px solid $cyan;
+  }
+
+  &:active {
+    background-color: #0ff2;
+  }
+}
+
+.app-icon {
+  color: $magenta;
+  font-size: 16px;
+  min-width: 22px;
+}
+
+.app-label {
+  color: $text;
+  font-size: 12px;
+  letter-spacing: 1px;
+}
+
+// ── Center ────────────────────────────────────────────────────────
+.center-area {
+  padding: 0 40px;
+}
+
+.glitch-sub {
+  color: $magenta;
+  font-size: 10px;
+  letter-spacing: 4px;
+  margin-bottom: 8px;
+}
+
+.glitch-sub2 {
+  color: $textdim;
+  font-size: 10px;
+  letter-spacing: 2px;
+  margin-top: 12px;
+}
+
+.big-clock {
+  color: $cyan;
+  font-size: 72px;
+  font-weight: 700;
+  letter-spacing: 6px;
+  // animated flicker via CSS animation on GTK
+  animation: flicker 8s infinite;
+}
+
+@keyframes flicker {
+  0%, 95%, 100% { opacity: 1; }
+  96%            { opacity: 0.7; }
+  97%            { opacity: 1; }
+  98%            { opacity: 0.4; }
+  99%            { opacity: 1; }
+}
+
+.big-date {
+  color: $dim;
+  font-size: 18px;
+  letter-spacing: 6px;
+  margin-top: -8px;
+}
+
+// Scanline animation bar
+.scan-bar-wrap {
+  margin-top: 20px;
+  min-width: 320px;
+  min-height: 2px;
+  background-color: $border2;
+  overflow: hidden;
+}
+
+.scan-bar {
+  min-height: 2px;
+  min-width: 80px;
+  background-color: $cyan;
+  animation: scan 3s linear infinite;
+}
+
+@keyframes scan {
+  0%   { margin-left: 0px;   }
+  50%  { margin-left: 240px; }
+  100% { margin-left: 0px;   }
+}
+
+// ── Right panel ───────────────────────────────────────────────────
+.right-panel {
+  background-color: $panel;
+  border-left: 1px solid $border2;
+  padding: 24px 16px;
+  min-width: 180px;
+}
+
+.stat-row {
+  padding: 0 2px;
+}
+
+.stat-label {
+  color: $textdim;
+  font-size: 10px;
+  letter-spacing: 2px;
+  min-width: 36px;
+}
+
+.stat-value {
+  color: $cyan;
+  font-weight: 700;
+  font-size: 12px;
+  min-width: 44px;
+}
+
+.stat-bar-bg {
+  background-color: #0ff1;
+  border: 1px solid $border2;
+  min-height: 4px;
+  min-width: 160px;
+  margin: 1px 0 8px;
+  border-radius: 0;
+}
+
+.stat-bar-fill {
+  background-color: $cyan;
+  min-height: 4px;
+  border-radius: 0;
+}

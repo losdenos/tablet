@@ -15,8 +15,8 @@ declare -A XRANDR=( [normal]="normal" [bottom-up]="inverted" [left-up]="right" [
 declare -A MATRIX=(
     [normal]="1 0 0 0 1 0 0 0 1"
     [bottom-up]="-1 0 1 0 -1 1 0 0 1"
-    [left-up]="0 1 0 -1 0 1 0 0 1"
-    [right-up]="0 -1 1 1 0 0 0 0 1"
+    [right-up]="0 1 0 -1 0 1 0 0 1"
+    [left-up]="0 -1 1 1 0 0 0 0 1"
 )
 
 LAST=""

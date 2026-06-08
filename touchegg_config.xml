@@ -1,0 +1,129 @@
+<!--
+  Touchégg config for Fujitsu Arrows Tab V727
+  Location: ~/.config/touchegg/touchegg.conf
+  Requires: touchegg (official Arch repo: sudo pacman -S touchegg)
+
+  NOTE: On a touchscreen, minimum swipe fingers is 2 (not 3 like touchpads).
+        We use 3-finger swipes to avoid conflicting with 2-finger scroll.
+-->
+<touchégg>
+
+  <settings>
+    <!-- How many ms the animation plays -->
+    <property name="animation_delay">150</property>
+    <!-- Animation duration in ms -->
+    <property name="action_execute_threshold">10</property>
+    <!-- Max ms between taps to be considered a tap gesture -->
+    <property name="color">3E9FED</property>
+    <property name="borderColor">3E9FED</property>
+  </settings>
+
+  <application name="All">
+
+    <!-- ── 3-finger swipes ──────────────────────────────────────── -->
+
+    <!-- 3-finger swipe UP → Dashboard hub -->
+    <gesture type="SWIPE" fingers="3" direction="UP">
+      <action type="RUN_COMMAND">
+        <repeat>false</repeat>
+        <command>~/.config/tablet/dashboard_hub.sh</command>
+        <on>end</on>
+        <animate>true</animate>
+        <color>89b4fa</color>
+        <borderColor>89b4fa</borderColor>
+      </action>
+    </gesture>
+
+    <!-- 3-finger swipe DOWN → Toggle on-screen keyboard -->
+    <gesture type="SWIPE" fingers="3" direction="DOWN">
+      <action type="RUN_COMMAND">
+        <repeat>false</repeat>
+        <command>~/.config/tablet/osk_toggle.sh</command>
+        <on>end</on>
+        <animate>true</animate>
+        <color>a6e3a1</color>
+        <borderColor>a6e3a1</borderColor>
+      </action>
+    </gesture>
+
+    <!-- 3-finger swipe LEFT → Next i3 workspace -->
+    <gesture type="SWIPE" fingers="3" direction="LEFT">
+      <action type="SEND_KEYS">
+        <repeat>false</repeat>
+        <modifiers>super</modifiers>
+        <keys>Right</keys>
+        <on>end</on>
+        <animate>true</animate>
+        <color>89b4fa</color>
+        <borderColor>89b4fa</borderColor>
+      </action>
+    </gesture>
+
+    <!-- 3-finger swipe RIGHT → Previous i3 workspace -->
+    <gesture type="SWIPE" fingers="3" direction="RIGHT">
+      <action type="SEND_KEYS">
+        <repeat>false</repeat>
+        <modifiers>super</modifiers>
+        <keys>Left</keys>
+        <on>end</on>
+        <animate>true</animate>
+        <color>89b4fa</color>
+        <borderColor>89b4fa</borderColor>
+      </action>
+    </gesture>
+
+    <!-- ── 4-finger swipes ──────────────────────────────────────── -->
+
+    <!-- 4-finger swipe UP → Quick controls -->
+    <gesture type="SWIPE" fingers="4" direction="UP">
+      <action type="RUN_COMMAND">
+        <repeat>false</repeat>
+        <command>~/.config/tablet/quick_controls.sh</command>
+        <on>end</on>
+        <animate>true</animate>
+        <color>f9e2af</color>
+        <borderColor>f9e2af</borderColor>
+      </action>
+    </gesture>
+
+    <!-- 4-finger swipe DOWN → Power menu -->
+    <gesture type="SWIPE" fingers="4" direction="DOWN">
+      <action type="RUN_COMMAND">
+        <repeat>false</repeat>
+        <command>~/.config/tablet/power_menu.sh</command>
+        <on>end</on>
+        <animate>true</animate>
+        <color>f38ba8</color>
+        <borderColor>f38ba8</borderColor>
+      </action>
+    </gesture>
+
+    <!-- 4-finger swipe LEFT → Close window -->
+    <gesture type="SWIPE" fingers="4" direction="LEFT">
+      <action type="CLOSE_WINDOW">
+        <animate>true</animate>
+        <color>f38ba8</color>
+        <borderColor>f38ba8</borderColor>
+      </action>
+    </gesture>
+
+    <!-- 4-finger swipe RIGHT → Fullscreen toggle -->
+    <gesture type="SWIPE" fingers="4" direction="RIGHT">
+      <action type="FULLSCREEN_WINDOW">
+        <animate>true</animate>
+        <color>89b4fa</color>
+        <borderColor>89b4fa</borderColor>
+      </action>
+    </gesture>
+
+    <!-- ── 2-finger tap → right-click (useful without mouse) ─────── -->
+    <gesture type="TAP" fingers="2">
+      <action type="MOUSE_CLICK">
+        <button>3</button>
+        <on>begin</on>
+      </action>
+    </gesture>
+
+  </application>
+
+</touchégg>

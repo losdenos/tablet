@@ -4,23 +4,11 @@
 ## 1. Install dependencies
 
 ```bash
-# AUR helper (if not already installed)
-sudo pacman -S --needed base-devel git
-git clone https://aur.archlinux.org/yay.git && cd yay && makepkg -si
+sudo pacman -S rofi dunst brightnessctl pamixer networkmanager \
+               alacritty xorg-xinput xorg-xrandr i3lock \
+               iio-sensor-proxy onboard thunar libreoffice-fresh
 
-# Core packages
-sudo pacman -S rofi dunst brightnessctl pamixer networkmanager alacritty \
-               xorg-xinput xorg-xrandr i3lock iio-sensor-proxy
-
-# AUR packages
-yay -S wvkbd libinput-gestures xdotool i3-gaps
-
-# Office suite (pick one)
-sudo pacman -S libreoffice-fresh   # full suite ~400MB
-# or: sudo pacman -S onlyoffice-bin  # more tablet-friendly UI (AUR)
-
-# File manager
-sudo pacman -S thunar
+yay -S touchegg xdotool wmctrl
 ```
 
 ## 2. Deploy scripts
@@ -40,42 +28,36 @@ chmod +x ~/.config/tablet/*.sh
 ## 3. Configure i3
 
 ```bash
-# Backup existing config
 cp ~/.config/i3/config ~/.config/i3/config.bak
-
-# Merge tablet config (or copy if starting fresh)
 cat i3_config_tablet >> ~/.config/i3/config
 ```
 
-## 4. Set up gestures
+## 4. Set up touchegg gestures
 
 ```bash
-# Add your user to input group
-sudo gpasswd -a $USER input
-# Log out and back in for this to take effect
+# Enable the system daemon
+sudo systemctl enable --now touchegg
 
 # Deploy gesture config
-cp libinput-gestures.conf ~/.config/libinput-gestures.conf
+mkdir -p ~/.config/touchegg
+cp touchegg_config.xml ~/.config/touchegg/touchegg.conf
 
-# Enable autostart
-libinput-gestures-setup autostart start
+# Add to i3 config if not already there:
+# exec --no-startup-id touchegg
 ```
 
 ## 5. Enable auto-rotation
 
 ```bash
-# Enable the sensor service
 sudo systemctl enable --now iio-sensor-proxy
-
-# Test it works
-monitor-sensor   # tilt the tablet and watch output
+# Test: monitor-sensor (tilt tablet and watch output)
 ```
 
-## 6. Tap-to-click (persistent via X11 config)
+## 6. Tap-to-click (persistent)
 
 ```bash
 sudo mkdir -p /etc/X11/xorg.conf.d
-sudo tee /etc/X11/xorg.conf.d/40-libinput.conf << 'EOF'
+sudo tee /etc/X11/xorg.conf.d/40-libinput.conf << 'XEOF'
 Section "InputClass"
     Identifier "touchscreen"
     MatchIsTouchscreen "on"
@@ -84,51 +66,56 @@ Section "InputClass"
     Option "NaturalScrolling" "true"
     Option "DisableWhileTyping" "false"
 EndSection
-EOF
+XEOF
 ```
 
 ## 7. Reboot and test
 
 ```bash
 reboot
-# After login: press Super+Space to open the dashboard hub
+# Super+Space → dashboard hub
+# Super+K     → on-screen keyboard
+# Super+Q     → quick controls
+# Super+P     → power menu
 ```
 
-## Gesture reference
+## Gesture reference (touchegg)
 
-| Gesture           | Action                    |
-|-------------------|---------------------------|
-| 3-finger up       | Dashboard hub             |
-| 3-finger down     | Toggle keyboard           |
-| 3-finger left     | Next workspace            |
-| 3-finger right    | Previous workspace        |
-| 4-finger up       | Quick controls            |
-| 4-finger down     | Power menu                |
-| 4-finger left     | Close window              |
-| 4-finger right    | Fullscreen toggle         |
+| Gesture          | Action                |
+|------------------|-----------------------|
+| 3-finger up      | Dashboard hub         |
+| 3-finger down    | Toggle keyboard       |
+| 3-finger left    | Next workspace        |
+| 3-finger right   | Previous workspace    |
+| 4-finger up      | Quick controls        |
+| 4-finger down    | Power menu            |
+| 4-finger left    | Close window          |
+| 4-finger right   | Fullscreen toggle     |
+| 2-finger tap     | Right-click           |
 
-## Key bindings
+## Keybind reference
 
-| Shortcut          | Action                    |
-|-------------------|---------------------------|
-| Super+Space       | Dashboard hub             |
-| Super+K           | Toggle on-screen keyboard |
-| Super+Q           | Quick controls            |
-| Super+P           | Power menu                |
-| Super+F           | Fullscreen                |
-| Super+Shift+Q     | Close window              |
+| Shortcut       | Action                |
+|----------------|-----------------------|
+| Super+Space    | Dashboard hub         |
+| Super+K        | On-screen keyboard    |
+| Super+Q        | Quick controls        |
+| Super+P        | Power menu            |
+| Super+F        | Fullscreen            |
+| Super+Shift+Q  | Close window          |
 
 ## Troubleshooting
 
-**Touch not working after rotation**: Check `xinput list` for the exact device name
-and update the grep pattern in `quick_controls.sh` and `rotation_daemon.sh`.
+**Touchegg gestures not working:**
+Run `systemctl status touchegg` — the system daemon must be running.
+Also check `ps aux | grep touchegg` — you need TWO processes (root daemon + user client).
+The user client is started by `exec --no-startup-id touchegg` in i3 config.
 
-**wvkbd not showing**: Run `wvkbd-mobintl --help` to confirm it installed,
-then check `/tmp/wvkbd.pid` permissions.
+**Auto-rotation not working:**
+Check `systemctl status iio-sensor-proxy` and run `monitor-sensor`.
+Some Fujitsu tablets need: `sudo modprobe industrialio`
+Add to `/etc/modules-load.d/tablet.conf` to persist.
 
-**Gestures not firing**: Confirm `$USER` is in the `input` group:
-`groups $USER` — should include `input`. Re-login required after adding.
-
-**iio-sensor-proxy not detecting orientation**: Check `systemctl status iio-sensor-proxy`
-and `monitor-sensor` output. Some Fujitsu tablets need the `industrialio` kernel module:
-`sudo modprobe industrialio` then add to `/etc/modules-load.d/tablet.conf`.
+**Touchscreen device name:**
+Run `xinput list` to find the exact name, then update the grep pattern
+in quick_controls.sh and rotation_daemon.sh if rotation isn't working.

@@ -2,22 +2,26 @@
 # osk_toggle.sh — Toggle on-screen keyboard (wvkbd)
 # Requires: wvkbd-mobintl  (AUR: wvkbd)
 # Install:  yay -S wvkbd
-
+ 
 PIDFILE="/tmp/wvkbd.pid"
-
+ 
 if [ -f "$PIDFILE" ] && kill -0 "$(cat $PIDFILE)" 2>/dev/null; then
-    # Keyboard is running — kill it
-    kill "$(cat $PIDFILE)"
-    rm -f "$PIDFILE"
+    # Already running — toggle visibility with SIGRTMIN
+    kill -SIGRTMIN "$(cat $PIDFILE)"
 else
-    # Launch keyboard — landscape layer with numbers row
+    # Not running — launch it
+    # -L: keyboard height in pixels (landscape)
+    # --fn: font name and size (no quotes around the whole value)
+    # color values are plain rrggbb hex, no # prefix
     wvkbd-mobintl \
-        --landscape \
+        -L 280 \
         --fn "Sans 18" \
         --bg 1e1e2e \
         --fg cdd6f4 \
+        --fg-sp 89b4fa \
         --press 89b4fa \
-        --press-fg 1e1e2e \
-        -L 280 &
+        --text 1e1e2e \
+        --text-sp 1e1e2e &
     echo $! > "$PIDFILE"
 fi
+ 

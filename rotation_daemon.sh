@@ -11,7 +11,7 @@ log() { echo "[rotation] $*" >> /tmp/rotation_daemon.log; }
 log "Starting. Touchscreen: '${TOUCH_DEVICE}'"
 
 # Map orientation → xrandr flag and touch matrix
-declare -A XRANDR=( [normal]="normal" [bottom-up]="inverted" [left-up]="right" [right-up]="left" )
+declare -A XRANDR=( [normal]="normal" [bottom-up]="inverted" [right-up]="right" [left-up]="left" )
 declare -A MATRIX=(
     [normal]="1 0 0 0 1 0 0 0 1"
     [bottom-up]="-1 0 1 0 -1 1 0 0 1"

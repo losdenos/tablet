@@ -1,6 +1,9 @@
 # Tablet Visual Setup — Fujitsu Arrows Tab V727
 # Arch Linux + i3 — 1920x1280
 
+> **💡 Quick install?** Run `bash install.sh` from the repo instead — it handles everything below automatically.
+> Need help? See **[TROUBLESHOOTING.md](./TROUBLESHOOTING.md)**. Adapting for different hardware? See **[CUSTOMIZATION.md](./CUSTOMIZATION.md)**.
+
 ## 1. Install packages
 
 ```bash
